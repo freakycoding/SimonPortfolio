@@ -4,7 +4,9 @@ const customName = document.getElementById("custom-name");
 const generateBtn = document.querySelector(".generate");
 const story = document.querySelector(".story");
 
+
 function randomValueFromArray(array) {
+
     const random = Math.floor(Math.random() * array.length);
     return array[random];
 }
@@ -33,6 +35,10 @@ const events = [
 // Partial return random string function
 
 function returnRandomStoryString() {
+    const randomCharacter = randomValueFromArray(characters);
+    const randomPlace = randomValueFromArray(places);
+    const randomEvent = randomValueFromArray(events);
+
     const storyText = `It was 94 Fahrenheit outside, so ${randomCharacter} went for a walk. 
     When they got to ${randomPlace}, they stared in horror for a few moments, then ${randomEvent}. 
     Bob saw the whole thing, but was not surprised — ${randomCharacter} weighs 300 pounds, and it was a hot day.`
@@ -44,19 +50,34 @@ function returnRandomStoryString() {
 
 generateBtn.addEventListener("click", generateStory);
 
+
 function generateStory() {
+    // Step 1: Generate a fresh random story each time
+    let newStory = returnRandomStoryString();
+
+    // Step 2: Replace Bob with custom name if provided
     if (customName.value !== "") {
         const name = customName.value;
-        const newStory = returnRandomStoryString();
+        newStory = newStory.replace('Bob', name);
     }
 
     if (document.getElementById("uk").checked) {
-        const weight = Math.round(300);
-        const temperature = Math.round(94);
+        // replace 300 with a calculation that converts 300 pounds into stones
+
+        // const weight = Math.round(300 / 14) + " stone";
+        const weight = `${Math.round(300 / 14)} stone`;
+
+        // replace 94 with a calculation that converts 94 Fahrenheit into Celsius
+
+        // const temperature = Math.round((94 - 32) * 5 / 9) + " °C Celsius";
+        const temperature = `${Math.round((94 - 32) * (5 / 9))} Celsius`;
+
+        newStory = newStory.replace("300 pounds", weight);
+        newStory = newStory.replace("94 Fahrenheit", temperature);
     }
 
     // TODO: replace "" with the correct expression
     // story.textContent = "";
-    story.textContent = "";
+    story.textContent = newStory;
     story.style.visibility = "visible";
 }
